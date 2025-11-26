@@ -113,3 +113,25 @@ type OPENFILENAMEW struct {
 	DwReserved		uint32
 	FlagsEx			uint32
 }
+
+type BROWSEINFOA struct {
+	HwndOwner		syscall.Handle
+	PidlRoot		uintptr
+	PszDisplayName		*byte
+	LpszTitle		*byte
+	UlFlags			uint32
+	Lpfn			uintptr
+	LParam			uintptr
+	IImage			int32
+}
+
+type BROWSEINFOW struct {
+	HwndOwner		syscall.Handle
+	PidlRoot		uintptr
+	PszDisplayName		*uint16
+	LpszTitle		*uint16
+	UlFlags			uint32
+	Lpfn			uintptr
+	LParam			uintptr
+	IImage			int32
+}

@@ -14,6 +14,7 @@ var (
 	User32			*syscall.LazyDLL
 	Comctl32		*syscall.LazyDLL
 	Comdlg32		*syscall.LazyDLL
+	Shell32			*syscall.LazyDLL
 	Gdi32			*syscall.LazyDLL
 )
 
@@ -64,11 +65,14 @@ func GetSaveFileNameW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList
 func GetOpenFileNameA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[202], args...)}
 func GetOpenFileNameW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[203], args...)}
 
-func SetBkMode(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[300], args...)}
-func SetTextColor(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[301], args...)}
-func GetStockObject(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[302], args...)}
-func CreateSolidBrush(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[303], args...)}
-func DeleteObject(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[304], args...)}
+func SHBrowseForFolderA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[300], args...)}
+func SHBrowseForFolderW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[301], args...)}
+
+func SetBkMode(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[400], args...)}
+func SetTextColor(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[401], args...)}
+func GetStockObject(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[402], args...)}
+func CreateSolidBrush(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[403], args...)}
+func DeleteObject(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[404], args...)}
 
 // Load libraries and find foreign functions
 func init() {
@@ -129,8 +133,14 @@ func init() {
 		"GetOpenFileNameW",
 	})
 
+	Shell32 = win.LazyLoad("shell32.dll")
+	win.MLazyProcs(Shell32, 300, []string{
+		"SHBrowseForFolderA",
+		"SHBrowseForFolderW",
+	})
+
 	Gdi32 = win.LazyLoad("gdi32.dll")
-	win.MLazyProcs(Gdi32, 300, []string{
+	win.MLazyProcs(Gdi32, 400, []string{
 		"SetBkMode",
 		"SetTextColor",
 		"GetStockObject",

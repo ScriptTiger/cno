@@ -178,16 +178,13 @@ func testWindow() {
 	screenWidth := GetSystemMetrics(SM_CXSCREEN)
 	screenHeight := GetSystemMetrics(SM_CYSCREEN)
 
-	x := (screenWidth - uintptr(windowWidth))/2
-	y := (screenHeight - uintptr(windowHeight))/2
-
 	CreateWindow(
 		proc,
 		false,
 		COLOR_MENU + 1,
 		cno.StrW("Sample CNO Window"),
 		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE,
-		x, y, uintptr(windowWidth), uintptr(windowHeight),
+		(screenWidth - uintptr(windowWidth))/2, (screenHeight - uintptr(windowHeight))/2, uintptr(windowWidth), uintptr(windowHeight),
 	)
 }
 
