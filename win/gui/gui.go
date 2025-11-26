@@ -67,6 +67,8 @@ func GetOpenFileNameW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList
 
 func SHBrowseForFolderA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[300], args...)}
 func SHBrowseForFolderW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[301], args...)}
+func SHGetPathFromIDListA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[302], args...)}
+func SHGetPathFromIDListW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[303], args...)}
 
 func SetBkMode(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[400], args...)}
 func SetTextColor(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[401], args...)}
@@ -137,6 +139,8 @@ func init() {
 	win.MLazyProcs(Shell32, 300, []string{
 		"SHBrowseForFolderA",
 		"SHBrowseForFolderW",
+		"SHGetPathFromIDListA",
+		"SHGetPathFromIDListW",
 	})
 
 	Gdi32 = win.LazyLoad("gdi32.dll")
