@@ -7,7 +7,8 @@ import (
 
 // Function to convert a Go string to an ANSI character array and return its pointer
 func StrA(str string) (uintptr) {
-	return uintptr(unsafe.Pointer(&append([]byte(str), 0)[0]))
+	ptr, _ := syscall.BytePtrFromString(str)
+	return uintptr(unsafe.Pointer(ptr))
 }
 
 // Function to convert a Go string to a wide character array and return its pointer

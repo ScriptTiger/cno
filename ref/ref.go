@@ -5,7 +5,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/ScriptTiger/cno"
+	// Imports low-level utilities for working with Windows API
 	"github.com/ScriptTiger/cno/win"
 
 	// Use a dot import for the gui package to make the coding context more familiar
@@ -25,24 +25,24 @@ func WriteFile(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[1000],
 // Define a native Go function for an unmanaged foreign function
 func GetStdHandle(arg uintptr) (uintptr) {return win.Invoke(win.LazyProc(Kernel32, "GetStdHandle"), arg)}
 
-// Function to test writing to standard output using foreign functions defined above and cno string utility function for ANSI characters
+// Function to test writing to standard output using foreign functions defined above and cno.StrA string utility function (using Str alias) for ANSI characters
 func testWrite() {
 	message := "Hello, world!"
 	WriteFile(
 		GetStdHandle(STD_OUTPUT_HANDLE),
-		cno.StrA(message),
+		Str(message),
 		uintptr(len(message)),
 		0,
 		0,
 	)
 }
 
-// Function to test calling MessageBoxW and using cno string utility function for wide characters
+// Function to test calling MessageBoxW (using MessageBox alias) and using cno.StrW string utility function (using Str alias) for wide characters
 func testMsgBox() {
-	MessageBoxW(
+	MessageBox(
 		0,
-		cno.StrW("This is a test message"),
-		cno.StrW("Test"),
+		Str("This is a test message"),
+		Str("Test"),
 		0,
 	)
 }
@@ -57,20 +57,20 @@ var (
 func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 	switch msg {
 		case WM_CREATE:
-			CreateWindowExW(
+			CreateWindowEx(
 				0,
-				cno.StrW("static"),
-				cno.StrW("Click the button below!"),
+				Str("static"),
+				Str("Click the button below!"),
 				WS_CHILD | WS_VISIBLE | SS_CENTER,
 				5, 5, 370, 20,
 				uintptr(hwnd),
 				uintptr(0),
 				0, 0,
 			)
-			bhwnd := CreateWindowExW(
+			bhwnd := CreateWindowEx(
 				0,
-				cno.StrW("button"),
-				cno.StrW("Click Me"),
+				Str("button"),
+				Str("Click Me"),
 				WS_CHILD | WS_VISIBLE,
 				150, 40, 100, 20,
 				uintptr(hwnd),
@@ -78,9 +78,9 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 				0, 0,
 			)
 			SetFocus(bhwnd)
-			pbhwnd := CreateWindowExW(
+			pbhwnd := CreateWindowEx(
 				0,
-				cno.StrW(PROGRESS_CLASS),
+				Str(PROGRESS_CLASS),
 				0,
 				WS_CHILD | WS_VISIBLE,
 				10, 80, 365, 20,
@@ -88,13 +88,13 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 				uintptr(2),
 				0, 0,
 			)
-			SendMessageW(
+			SendMessage(
 				pbhwnd,
 				PBM_SETRANGE,
 				0,
 				uintptr(100<<16),
 			)
-			SendMessageW(
+			SendMessage(
 				pbhwnd,
 				PBM_SETSTEP,
 				1,
@@ -122,9 +122,9 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 		case WM_COMMAND:
 			id := int(wparam & 0xffff)
 			if id == 1 {
-				SetWindowTextW(
+				SetWindowText(
 					GetDlgItem(uintptr(hwnd), 0),
-					cno.StrW("Please wait while the dummy progress bar finishes."),
+					Str("Please wait while the dummy progress bar finishes."),
 				)
 				EnableWindow(
 					GetDlgItem(uintptr(hwnd), 1),
@@ -134,15 +134,15 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 				go func() {
 					for i := 0; i < 100; i++ {
 						time.Sleep(100 * time.Millisecond)
-						SendMessageW(
+						SendMessage(
 							GetDlgItem(uintptr(hwnd), 2),
 							PBM_STEPIT,
 							0, 0,
 						)
 					}
-					SetWindowTextW(
+					SetWindowText(
 						GetDlgItem(uintptr(hwnd), 0),
-						cno.StrW("Progress bar complete! Try again if you want!"),
+						Str("Progress bar complete! Try again if you want!"),
 					)
 					EnableWindow(
 						GetDlgItem(uintptr(hwnd), 1),
@@ -165,7 +165,7 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 			}
 			return 0
 	}
-	return DefWindowProcW(
+	return DefWindowProc(
 		uintptr(hwnd),
 		uintptr(msg),
 		wparam,
@@ -180,16 +180,19 @@ func testWindow() {
 
 	CreateWindow(
 		proc,
-		false,
 		COLOR_MENU + 1,
-		cno.StrW("Sample CNO Window"),
+		Str("Sample CNO Window"),
 		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE,
 		(screenWidth - uintptr(windowWidth))/2, (screenHeight - uintptr(windowHeight))/2, uintptr(windowWidth), uintptr(windowHeight),
 	)
 }
 
 func main() {
+	// Switch from the default wide character support to ANSI instead for sending text to standard output using WriteFile
+	EnableAnsi(true)
 	testWrite()
+	// Switch back to the default wide character support
+	EnableAnsi(false)
 	testMsgBox()
 	testWindow()
 }
