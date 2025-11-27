@@ -47,10 +47,14 @@ func testMsgBox() {
 	)
 }
 
-// Window dimensions
-var (
-	windowWidth = 400
-	windowHeight = 150
+const (
+	// Window dimensions
+	WINDOW_WIDTH = 400
+	WINDOW_HEIGHT = 150
+
+	// Colors
+	BRUSH_COLOR = COLOR_MENU + 1
+	TEXT_COLOR = 0
 )
 
 // Window callback function to be given to CreateWindow
@@ -112,7 +116,7 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 					uintptr(unsafe.Pointer(&paintStruct)),
 				),
 				uintptr(unsafe.Pointer(&paintStruct.RcPaint)),
-				uintptr(COLOR_MENU + 1),
+				uintptr(BRUSH_COLOR),
 			)
 			EndPaint(
 				uintptr(hwnd),
@@ -159,9 +163,9 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 			if controlHwnd == syscall.Handle(GetDlgItem(uintptr(hwnd), 0)) {
 				SetTextColor(
 					uintptr(hdc),
-					uintptr(0x00000000),
+					uintptr(TEXT_COLOR),
 				)
-				return uintptr(COLOR_MENU + 1)
+				return uintptr(BRUSH_COLOR)
 			}
 			return 0
 	}
@@ -180,10 +184,10 @@ func testWindow() {
 
 	CreateWindow(
 		proc,
-		COLOR_MENU + 1,
+		BRUSH_COLOR,
 		Str("Sample CNO Window"),
 		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE,
-		(screenWidth - uintptr(windowWidth))/2, (screenHeight - uintptr(windowHeight))/2, uintptr(windowWidth), uintptr(windowHeight),
+		(screenWidth - uintptr(WINDOW_WIDTH))/2, (screenHeight - uintptr(WINDOW_HEIGHT))/2, uintptr(WINDOW_WIDTH), uintptr(WINDOW_HEIGHT),
 	)
 }
 
