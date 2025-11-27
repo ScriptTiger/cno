@@ -59,8 +59,24 @@ func MLazyProc(dll *syscall.LazyDLL, index int, str string) {
 	return
 }
 
+// Function to lazily load a DLL, and find and manage a foreign function within it
+func MLazyLoadProc(dllStr string, index int, procStr string) (dll *syscall.LazyDLL) {
+	dll = LazyLoad(dllStr)
+	ProcList[index] = LazyProc(dll, procStr)
+	return
+}
+
 // Function to find and manage a list of foreign functions within a lazily loaded DLL
 func MLazyProcs(dll *syscall.LazyDLL, index int, strs []string) {
+	for i := 0; i < len(strs); i, index = i+1, index+1 {
+		MLazyProc(dll, index, strs[i])
+	}
+	return
+}
+
+// Function to lazily load a DLL, and find and manage a list of foreign functions within it
+func MLazyLoadProcs(str string, index int, strs []string) (dll *syscall.LazyDLL) {
+	dll = LazyLoad(str)
 	for i := 0; i < len(strs); i, index = i+1, index+1 {
 		MLazyProc(dll, index, strs[i])
 	}

@@ -14,8 +14,9 @@ const (
 	USER32_ADDR		= 100
 	COMDLG32_ADDR		= 200
 	SHELL32_ADDR		= 300
-	GDI32_ADDR		= 400
-	ALIAS_ADDR		= 500
+	OLE32_ADDR		= 400
+	GDI32_ADDR		= 500
+	ALIAS_ADDR		= 600
 	KERNEL32_ALIAS_ADDR	= ALIAS_ADDR
 	USER32_ALIAS_ADDR	= KERNEL32_ALIAS_ADDR+10
 	COMDLG32_ALIAS_ADDR	= USER32_ALIAS_ADDR+20
@@ -30,6 +31,7 @@ var (
 	Comctl32		*syscall.LazyDLL
 	Comdlg32		*syscall.LazyDLL
 	Shell32			*syscall.LazyDLL
+	Ole32			*syscall.LazyDLL
 	Gdi32			*syscall.LazyDLL
 
 	// Runtime environment
@@ -88,6 +90,9 @@ func SHBrowseForFolderA(args... uintptr) (uintptr) {return win.Invoke(win.ProcLi
 func SHBrowseForFolderW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[SHELL32_ADDR+1], args...)}
 func SHGetPathFromIDListA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[SHELL32_ADDR+2], args...)}
 func SHGetPathFromIDListW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[SHELL32_ADDR+3], args...)}
+func SHSimpleIDListFromPath(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[SHELL32_ADDR+4], args...)}
+
+func CoTaskMemFree(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[OLE32_ADDR], args...)}
 
 func SetBkMode(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[GDI32_ADDR], args...)}
 func SetTextColor(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[GDI32_ADDR+1], args...)}
@@ -123,15 +128,13 @@ func Str(str string) (ret uintptr) {
 
 // Load libraries and find foreign functions
 func init() {
-	Kernel32 = win.LazyLoad("kernel32.dll")
-	win.MLazyProcs(Kernel32, KERNEL32_ADDR, []string{
+	Kernel32 = win.MLazyLoadProcs("kernel32.dll", KERNEL32_ADDR, []string{
 		"GetModuleHandleA",
 		"GetModuleHandleW",
 		"GetCurrentThreadId",
 	})
 
-	User32 = win.LazyLoad("user32.dll")
-	win.MLazyProcs(User32, USER32_ADDR, []string{
+	User32 = win.MLazyLoadProcs("user32.dll", USER32_ADDR, []string{
 		"MessageBoxA",
 		"MessageBoxW",
 		"RegisterClassA",
@@ -172,24 +175,24 @@ func init() {
 	Comctl32 = win.LazyLoad("comctl32.dll")
 	win.Invoke(win.LazyProc(Comctl32, "InitCommonControls"))
 
-	Comdlg32 = win.LazyLoad("comdlg32.dll")
-	win.MLazyProcs(Comdlg32, COMDLG32_ADDR, []string{
+	Comdlg32 = win.MLazyLoadProcs("comdlg32.dll", COMDLG32_ADDR, []string{
 		"GetSaveFileNameA",
 		"GetSaveFileNameW",
 		"GetOpenFileNameA",
 		"GetOpenFileNameW",
 	})
 
-	Shell32 = win.LazyLoad("shell32.dll")
-	win.MLazyProcs(Shell32, SHELL32_ADDR, []string{
+	Shell32 = win.MLazyLoadProcs("shell32.dll", SHELL32_ADDR, []string{
 		"SHBrowseForFolderA",
 		"SHBrowseForFolderW",
 		"SHGetPathFromIDListA",
 		"SHGetPathFromIDListW",
+		"SHSimpleIDListFromPath",
 	})
 
-	Gdi32 = win.LazyLoad("gdi32.dll")
-	win.MLazyProcs(Gdi32, GDI32_ADDR, []string{
+	Ole32 = win.MLazyLoadProc("ole32.dll", OLE32_ADDR, "CoTaskMemFree")
+
+	Gdi32 = win.MLazyLoadProcs("gdi32.dll", GDI32_ADDR, []string{
 		"SetBkMode",
 		"SetTextColor",
 		"GetStockObject",
@@ -234,6 +237,7 @@ func Init_aliases() {
 		"SHBrowseForFolder",
 		"SHGetPathFromIDList",
 	})
+
 }
 
 // Function to switch between ANSI and wide character support
