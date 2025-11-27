@@ -111,8 +111,8 @@ func SetWindowText(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[US
 func GetSaveFileName(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ALIAS_ADDR], args...)}
 func GetOpenFileName(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ALIAS_ADDR+1], args...)}
 
-func SHBrowseForFolder(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ALIAS_ADDR], args...)}
-func SHGetPathFromIDList(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ALIAS_ADDR+1], args...)}
+func SHBrowseForFolder(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[SHELL32_ALIAS_ADDR], args...)}
+func SHGetPathFromIDList(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[SHELL32_ALIAS_ADDR+1], args...)}
 
 // Utility aliases
 func Str(str string) (ret uintptr) {
