@@ -44,6 +44,8 @@ var (
 func GetModuleHandleA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[KERNEL32_ADDR], args...)}
 func GetModuleHandleW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[KERNEL32_ADDR+1], args...)}
 func GetCurrentThreadId(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[KERNEL32_ADDR+2], args...)}
+func WideCharToMultiByte(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[KERNEL32_ADDR+3], args...)}
+func MultiByteToWideChar(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[KERNEL32_ADDR+4], args...)}
 
 func MessageBoxA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR], args...)}
 func MessageBoxW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+1], args...)}
@@ -139,6 +141,8 @@ func init() {
 		"GetModuleHandleA",
 		"GetModuleHandleW",
 		"GetCurrentThreadId",
+		"WideCharToMultiByte",
+		"MultiByteToWideChar",
 	})
 
 	User32 = win.MLazyLoadProcs("user32.dll", USER32_ADDR, []string{
