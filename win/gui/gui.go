@@ -87,6 +87,9 @@ func GetWindowTextLengthA(args... uintptr) (uintptr) {return win.Invoke(win.Proc
 func GetWindowTextLengthW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+37], args...)}
 func GetWindowTextA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+38], args...)}
 func GetWindowTextW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+39], args...)}
+func GetWindowThreadProcessId(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+40], args...)}
+func PostThreadMessageA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+41], args...)}
+func PostThreadMessageW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+42], args...)}
 
 func GetSaveFileNameA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ADDR], args...)}
 func GetSaveFileNameW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ADDR+1], args...)}
@@ -121,6 +124,7 @@ func SendMessage(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER
 func SetWindowText(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+9], args...)}
 func GetWindowTextLength(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+10], args...)}
 func GetWindowText(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+11], args...)}
+func PostThreadMessage(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+12], args...)}
 
 func GetSaveFileName(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ALIAS_ADDR], args...)}
 func GetOpenFileName(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ALIAS_ADDR+1], args...)}
@@ -186,6 +190,9 @@ func init() {
 		"GetWindowTextLengthW",
 		"GetWindowTextA",
 		"GetWindowTextW",
+		"GetWindowThreadProcessId",
+		"PostThreadMessageA",
+		"PostThreadMessageW",
 	})
 
 	Comctl32 = win.LazyLoad("comctl32.dll")
@@ -243,6 +250,7 @@ func Init_aliases() {
 		"SetWindowText",
 		"GetWindowTextLength",
 		"GetWindowText",
+		"PostThreadMessage",
 	})
 
 	init_alias_block(suffix, Comdlg32, COMDLG32_ALIAS_ADDR, []string{
