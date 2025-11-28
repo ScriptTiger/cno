@@ -80,6 +80,7 @@ func SetFocus(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_
 func IsWindowEnabled(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+32], args...)}
 func SetForegroundWindow(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+33], args...)}
 func AttachThreadInput(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+34], args...)}
+func DestroyWindow(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+35], args...)}
 
 func GetSaveFileNameA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ADDR], args...)}
 func GetSaveFileNameW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ADDR+1], args...)}
@@ -170,6 +171,7 @@ func init() {
 		"IsWindowEnabled",
 		"SetForegroundWindow",
 		"AttachThreadInput",
+		"DestroyWindow",
 	})
 
 	Comctl32 = win.LazyLoad("comctl32.dll")
