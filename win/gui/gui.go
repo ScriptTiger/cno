@@ -81,6 +81,10 @@ func IsWindowEnabled(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[
 func SetForegroundWindow(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+33], args...)}
 func AttachThreadInput(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+34], args...)}
 func DestroyWindow(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+35], args...)}
+func GetWindowTextLengthA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+36], args...)}
+func GetWindowTextLengthW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+37], args...)}
+func GetWindowTextA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+38], args...)}
+func GetWindowTextW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+39], args...)}
 
 func GetSaveFileNameA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ADDR], args...)}
 func GetSaveFileNameW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ADDR+1], args...)}
@@ -113,6 +117,8 @@ func LoadCursor(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER3
 func DefWindowProc(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+7], args...)}
 func SendMessage(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+8], args...)}
 func SetWindowText(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+9], args...)}
+func GetWindowTextLength(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+10], args...)}
+func GetWindowText(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+11], args...)}
 
 func GetSaveFileName(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ALIAS_ADDR], args...)}
 func GetOpenFileName(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ALIAS_ADDR+1], args...)}
@@ -172,6 +178,10 @@ func init() {
 		"SetForegroundWindow",
 		"AttachThreadInput",
 		"DestroyWindow",
+		"GetWindowTextLengthA",
+		"GetWindowTextLengthW",
+		"GetWindowTextA",
+		"GetWindowTextW",
 	})
 
 	Comctl32 = win.LazyLoad("comctl32.dll")
@@ -227,7 +237,8 @@ func Init_aliases() {
 		"DefWindowProc",
 		"SendMessage",
 		"SetWindowText",
-
+		"GetWindowTextLength",
+		"GetWindowText",
 	})
 
 	init_alias_block(suffix, Comdlg32, COMDLG32_ALIAS_ADDR, []string{
