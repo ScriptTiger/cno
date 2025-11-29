@@ -136,9 +136,9 @@ func SHBrowseForFolder(args... uintptr) (uintptr) {return win.Invoke(win.ProcLis
 func SHGetPathFromIDList(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[SHELL32_ALIAS_ADDR+1], args...)}
 
 // Utility aliases
-func Str(str string) (ret uintptr) {
-	if ansi {ret = cno.StrA(str)
-	} else {ret = cno.StrW(str)}
+func CStr(str string) (ret uintptr) {
+	if ansi {ret = cno.CStrA(str)
+	} else {ret = cno.CStrW(str)}
 	return
 }
 
@@ -289,7 +289,7 @@ func CreateWindow(proc func(hwnd syscall.Handle, msg uint32, wparam, lparam uint
 	if win.ProcList[ALIAS_ADDR] == 0 {Init_aliases()}
 
 	hInstance := GetModuleHandle(0)
-	classNamePtr := Str("cnoWindowClass")
+	classNamePtr := CStr("cnoWindowClass")
 	if ansi {
 		RegisterClass(uintptr(unsafe.Pointer(&WNDCLASSA{
 			LpfnWndProc:	syscall.NewCallback(proc),

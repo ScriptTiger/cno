@@ -25,24 +25,24 @@ func WriteFile(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[1000],
 // Define a native Go function for an unmanaged foreign function
 func GetStdHandle(arg uintptr) (uintptr) {return win.Invoke(win.LazyProc(Kernel32, "GetStdHandle"), arg)}
 
-// Function to test writing to standard output using foreign functions defined above and cno.StrA string utility function (using Str alias) for ANSI characters
+// Function to test writing to standard output using foreign functions defined above and cno.CStrA string utility function (using CStr alias) for ANSI characters
 func testWrite() {
 	message := "Hello, world!"
 	WriteFile(
 		GetStdHandle(STD_OUTPUT_HANDLE),
-		Str(message),
+		CStr(message),
 		uintptr(len(message)),
 		0,
 		0,
 	)
 }
 
-// Function to test calling MessageBoxW (using MessageBox alias) and using cno.StrW string utility function (using Str alias) for wide characters
+// Function to test calling MessageBoxW (using MessageBox alias) and using cno.CStrW string utility function (using CStr alias) for wide characters
 func testMsgBox() {
 	MessageBox(
 		0,
-		Str("This is a test message"),
-		Str("Test"),
+		CStr("This is a test message"),
+		CStr("Test"),
 		0,
 	)
 }
@@ -63,8 +63,8 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 		case WM_CREATE:
 			CreateWindowEx(
 				0,
-				Str("static"),
-				Str("Click the button below!"),
+				CStr("static"),
+				CStr("Click the button below!"),
 				WS_CHILD | WS_VISIBLE | SS_CENTER,
 				5, 5, 370, 20,
 				uintptr(hwnd),
@@ -73,8 +73,8 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 			)
 			bhwnd := CreateWindowEx(
 				0,
-				Str("button"),
-				Str("Click Me"),
+				CStr("button"),
+				CStr("Click Me"),
 				WS_CHILD | WS_VISIBLE,
 				150, 40, 100, 20,
 				uintptr(hwnd),
@@ -84,7 +84,7 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 			SetFocus(bhwnd)
 			pbhwnd := CreateWindowEx(
 				0,
-				Str(PROGRESS_CLASS),
+				CStr(PROGRESS_CLASS),
 				0,
 				WS_CHILD | WS_VISIBLE,
 				10, 80, 365, 20,
@@ -128,7 +128,7 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 			if id == 1 {
 				SetWindowText(
 					GetDlgItem(uintptr(hwnd), 0),
-					Str("Please wait while the dummy progress bar finishes."),
+					CStr("Please wait while the dummy progress bar finishes."),
 				)
 				EnableWindow(
 					GetDlgItem(uintptr(hwnd), 1),
@@ -146,7 +146,7 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 					}
 					SetWindowText(
 						GetDlgItem(uintptr(hwnd), 0),
-						Str("Progress bar complete! Try again if you want!"),
+						CStr("Progress bar complete! Try again if you want!"),
 					)
 					EnableWindow(
 						GetDlgItem(uintptr(hwnd), 1),
@@ -185,7 +185,7 @@ func testWindow() {
 	CreateWindow(
 		proc,
 		BRUSH_COLOR,
-		Str("Sample CNO Window"),
+		CStr("Sample CNO Window"),
 		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE,
 		(screenWidth - uintptr(WINDOW_WIDTH))/2, (screenHeight - uintptr(WINDOW_HEIGHT))/2, uintptr(WINDOW_WIDTH), uintptr(WINDOW_HEIGHT),
 	)
