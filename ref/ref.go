@@ -148,9 +148,15 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 
 // Function to test calling CreateWindow
 func testWindow() {
+
+	// Get screen dimensions
+
 	screenWidth := GetSystemMetrics(SM_CXSCREEN)
 	screenHeight := GetSystemMetrics(SM_CYSCREEN)
 
+	// Call CreateWindow
+	// CreateWindow calls a pure Go function, not the deprecated Windows API alias of the same name
+	// Internally, CreateWindowEx (an alias for either CreateWindowExA or CreateWindowExW) is used
 	CreateWindow(
 		proc,
 		COLOR_MENU + 1,
