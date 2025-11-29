@@ -24,6 +24,11 @@ https://pkg.go.dev/github.com/ScriptTiger/cno/win/gui
 Reference implementation:  
 https://github.com/ScriptTiger/cno/blob/main/ref
 
+# Other projects using cno
+
+kanziSFX:  
+https://github.com/ScriptTiger/kanziSFX
+
 # More About ScriptTiger
 
 For more ScriptTiger scripts and goodies, check out ScriptTiger's GitHub Pages website:  
