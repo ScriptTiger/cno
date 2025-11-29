@@ -90,6 +90,8 @@ func GetWindowTextW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[U
 func GetWindowThreadProcessId(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+40], args...)}
 func PostThreadMessageA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+41], args...)}
 func PostThreadMessageW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+42], args...)}
+func PostMessageA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+43], args...)}
+func PostMessageW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ADDR+44], args...)}
 
 func GetSaveFileNameA(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ADDR], args...)}
 func GetSaveFileNameW(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ADDR+1], args...)}
@@ -125,6 +127,7 @@ func SetWindowText(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[US
 func GetWindowTextLength(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+10], args...)}
 func GetWindowText(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+11], args...)}
 func PostThreadMessage(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+12], args...)}
+func PostMessage(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[USER32_ALIAS_ADDR+13], args...)}
 
 func GetSaveFileName(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ALIAS_ADDR], args...)}
 func GetOpenFileName(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[COMDLG32_ALIAS_ADDR+1], args...)}
@@ -193,6 +196,8 @@ func init() {
 		"GetWindowThreadProcessId",
 		"PostThreadMessageA",
 		"PostThreadMessageW",
+		"PostMessageA",
+		"PostMessageW",
 	})
 
 	Comctl32 = win.LazyLoad("comctl32.dll")
@@ -251,6 +256,7 @@ func Init_aliases() {
 		"GetWindowTextLength",
 		"GetWindowText",
 		"PostThreadMessage",
+		"PostMessage",
 	})
 
 	init_alias_block(suffix, Comdlg32, COMDLG32_ALIAS_ADDR, []string{
