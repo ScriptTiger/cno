@@ -3,7 +3,6 @@ package main
 import (
 	"syscall"
 	"time"
-	"unsafe"
 
 	// Imports low-level utilities for working with Windows API
 	"github.com/ScriptTiger/cno/win"
@@ -47,14 +46,10 @@ func testMsgBox() {
 	)
 }
 
+// Window dimensions
 const (
-	// Window dimensions
 	WINDOW_WIDTH = 400
 	WINDOW_HEIGHT = 150
-
-	// Colors
-	BRUSH_COLOR = COLOR_MENU + 1
-	TEXT_COLOR = 0
 )
 
 // Window callback function to be given to CreateWindow
@@ -108,21 +103,6 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 		case WM_DESTROY:
 			PostQuitMessage(0)
 			return 0
-		case WM_PAINT:
-			var paintStruct PAINTSTRUCT
-			FillRect(
-				BeginPaint(
-					uintptr(hwnd),
-					uintptr(unsafe.Pointer(&paintStruct)),
-				),
-				uintptr(unsafe.Pointer(&paintStruct.RcPaint)),
-				uintptr(BRUSH_COLOR),
-			)
-			EndPaint(
-				uintptr(hwnd),
-				uintptr(unsafe.Pointer(&paintStruct)),
-			)
-			return 0
 		case WM_COMMAND:
 			id := int(wparam & 0xffff)
 			if id == 1 {
@@ -157,17 +137,6 @@ func proc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (uintptr) {
 				}()
 			}
 			return 0
-		case WM_CTLCOLORSTATIC:
-			hdc := syscall.Handle(wparam)
-			controlHwnd := syscall.Handle(lparam)
-			if controlHwnd == syscall.Handle(GetDlgItem(uintptr(hwnd), 0)) {
-				SetTextColor(
-					uintptr(hdc),
-					uintptr(TEXT_COLOR),
-				)
-				return uintptr(BRUSH_COLOR)
-			}
-			return 0
 	}
 	return DefWindowProc(
 		uintptr(hwnd),
@@ -184,7 +153,7 @@ func testWindow() {
 
 	CreateWindow(
 		proc,
-		BRUSH_COLOR,
+		COLOR_MENU + 1,
 		CStr("Sample CNO Window"),
 		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE,
 		(screenWidth - uintptr(WINDOW_WIDTH))/2, (screenHeight - uintptr(WINDOW_HEIGHT))/2, uintptr(WINDOW_WIDTH), uintptr(WINDOW_HEIGHT),
