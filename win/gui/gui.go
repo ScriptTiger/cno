@@ -8,21 +8,6 @@ import (
 	"github.com/ScriptTiger/cno/win"
 )
 
-// Create constants for ProcList blocks
-const (
-	KERNEL32_ADDR		= 0
-	USER32_ADDR		= 100
-	COMDLG32_ADDR		= 200
-	SHELL32_ADDR		= 300
-	OLE32_ADDR		= 400
-	GDI32_ADDR		= 500
-	ALIAS_ADDR		= 600
-	KERNEL32_ALIAS_ADDR	= ALIAS_ADDR
-	USER32_ALIAS_ADDR	= KERNEL32_ALIAS_ADDR+10
-	COMDLG32_ALIAS_ADDR	= USER32_ALIAS_ADDR+20
-	SHELL32_ALIAS_ADDR	= COMDLG32_ALIAS_ADDR+10
-)
-
 var (
 	// Windows DLLs
 
@@ -137,7 +122,7 @@ func SHGetPathFromIDList(args... uintptr) (uintptr) {return win.Invoke(win.ProcL
 
 // Utility aliases
 func CStr(str string) (ret uintptr) {
-	if ansi {ret = cno.CStrA(str)
+	if ansi {ret = cno.CStr(str)
 	} else {ret = cno.CStrW(str)}
 	return
 }

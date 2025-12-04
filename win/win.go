@@ -14,7 +14,7 @@ func UMLoad(str string) (dll *syscall.DLL) {
 	return
 }
 
-// Function to eagerly load a managed a DLL
+// Function to eagerly load a managed DLL
 func Load(str string) (dll *syscall.DLL) {
 	dll = UMLoad(str)
 	dllList = append(dllList, dll)

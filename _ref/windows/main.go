@@ -24,7 +24,7 @@ func WriteFile(args... uintptr) (uintptr) {return win.Invoke(win.ProcList[1000],
 // Define a native Go function for an unmanaged foreign function
 func GetStdHandle(arg uintptr) (uintptr) {return win.Invoke(win.LazyProc(Kernel32, "GetStdHandle"), arg)}
 
-// Function to test writing to standard output using foreign functions defined above and cno.CStrA string utility function (using CStr alias) for ANSI characters
+// Function to test writing to standard output using foreign functions defined above and cno.CStr string utility function (using CStr alias) for ANSI characters
 func testWrite() {
 	message := "Hello, world!"
 	WriteFile(
