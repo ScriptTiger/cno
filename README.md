@@ -12,7 +12,7 @@ Please refer to the dev package docs and reference implementation for more detai
 Dev package docs:  
 https://pkg.go.dev/github.com/ScriptTiger/cno  
 https://pkg.go.dev/github.com/ScriptTiger/cno/win  
-https://pkg.go.dev/github.com/ScriptTiger/cno/win/gui
+https://pkg.go.dev/github.com/ScriptTiger/cno/win/gui  
 https://pkg.go.dev/github.com/ScriptTiger/cno/lnx  
 https://pkg.go.dev/github.com/ScriptTiger/cno/lnx/gui
 
