@@ -46,6 +46,8 @@ func Gtk_label_set_text(args... uintptr) (uintptr) {return lnx.Invoke(lnx.ProcLi
 func Gtk_widget_set_sensitive(args... uintptr) (uintptr) {return lnx.Invoke(lnx.ProcList[LIBGTK_ADDR+23], args...)}
 func Gtk_progress_bar_set_text(args... uintptr) (uintptr) {return lnx.Invoke(lnx.ProcList[LIBGTK_ADDR+24], args...)}
 func Gtk_widget_grab_focus(args... uintptr) (uintptr) {return lnx.Invoke(lnx.ProcList[LIBGTK_ADDR+25], args...)}
+func Gtk_message_dialog_new(args... uintptr) (uintptr) {return lnx.Invoke(lnx.ProcList[LIBGTK_ADDR+26], args...)}
+func Gtk_dialog_new_with_buttons(args... uintptr) (uintptr) {return lnx.Invoke(lnx.ProcList[LIBGTK_ADDR+27], args...)}
 
 func G_free(args... uintptr) (uintptr) {return lnx.Invoke(lnx.ProcList[LIBGLIB_ADDR], args...)}
 func G_idle_add(args... uintptr) (uintptr) {return lnx.Invoke(lnx.ProcList[LIBGLIB_ADDR+1], args...)}
@@ -82,6 +84,8 @@ func init() {
 		"gtk_widget_set_sensitive",
 		"gtk_progress_bar_set_text",
 		"gtk_widget_grab_focus",
+		"gtk_message_dialog_new",
+		"gtk_dialog_new_with_buttons",
 	})
 
 	purego.RegisterLibFunc(&Gtk_main_quit, Libgtk, "gtk_main_quit")
